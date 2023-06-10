@@ -449,8 +449,7 @@ export class Matrix {
       if (isSingular) {
         // this is extremely inefficient
         const adj = this.comatrix();
-        adj.transpose();
-        return adj;
+        return adj.transpose();
       }
       let detInv = 1;
       let emtx = I;
