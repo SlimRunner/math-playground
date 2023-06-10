@@ -444,7 +444,6 @@ export class Matrix {
   adjoint() {
     if (this.isSquare()) {
       const M = this.rref();
-      const I = Matrix.getIdentity(this.rows);
       const isSingular = M.entries.reduce((prev, cur, i) => prev * cur[i], 1) === 0;
       if (isSingular) {
         // this is extremely inefficient
@@ -452,7 +451,7 @@ export class Matrix {
         return adj.transpose();
       }
       let detInv = 1;
-      let emtx = I;
+      let emtx = Matrix.getIdentity(this.rows);
       M.erops.forEach(rowop => {
         detInv *= rowop.factor;
         switch (rowop.info.type) {
