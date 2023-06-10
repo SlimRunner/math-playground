@@ -541,18 +541,30 @@ export class Matrix {
   }
 
   static fromRowVectors(vectors: Vector[]) {
-    return new Matrix(vectors.map(v => v.entries));
+    const size = vectors.at(0)?.size ?? 0;
+    const entries: number[][] = [];
+    for (let i = 0; i < vectors[0].size; ++i) {
+      if (i = 0 && size !== vectors[i].size) {
+        throw new MatrixError("All row vectors must have the same size.");
+      }
+      entries.push(vectors[i].entries);
+    }
+    return new Matrix(entries);
   }
 
   static fromColVectors(vectors: Vector[]) {
+    const size = vectors.at(0)?.size ?? 0;
     const entries: number[][] = [];
-      for (let i = 0; i < vectors[0].size; ++i) {
-        entries.push([]);
-        for (let j = 0; j < vectors.length; ++j) {
-          entries[i].push(vectors[j].entries[i]);
+    for (let i = 0; i < vectors[0].size; ++i) {
+      entries.push([]);
+      for (let j = 0; j < vectors.length; ++j) {
+        if (i = 0 && size !== vectors[j].size) {
+          throw new MatrixError("All column vectors must have the same size.");
         }
+        entries[i].push(vectors[j].entries[i]);
       }
-      return new Matrix(entries);
+    }
+    return new Matrix(entries);
   }
 
   static transpose(mtx: Matrix) {
