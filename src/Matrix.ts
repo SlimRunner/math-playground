@@ -544,7 +544,7 @@ export class Matrix {
     const size = vectors.at(0)?.size ?? 0;
     const entries: number[][] = [];
     for (let i = 0; i < vectors[0].size; ++i) {
-      if (i = 0 && size !== vectors[i].size) {
+      if (i === 0 && size !== vectors[i].size) {
         throw new MatrixError("All row vectors must have the same size.");
       }
       entries.push(vectors[i].entries);
@@ -558,7 +558,7 @@ export class Matrix {
     for (let i = 0; i < vectors[0].size; ++i) {
       entries.push([]);
       for (let j = 0; j < vectors.length; ++j) {
-        if (i = 0 && size !== vectors[j].size) {
+        if (i === 0 && size !== vectors[j].size) {
           throw new MatrixError("All column vectors must have the same size.");
         }
         entries[i].push(vectors[j].entries[i]);
