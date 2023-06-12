@@ -1,5 +1,5 @@
-import { Matrix } from "./Matrix";
-import { Vector } from "./Vector";
+import { Matrix } from "./linear-algebra/Matrix";
+import { Vector } from "./linear-algebra/Vector";
 import { printRowOperations } from "./utilities";
 
 const ctab = (s:any) => {
@@ -46,3 +46,9 @@ const [A1, A2, A3] = [0,1,2].map(n => Matrix.fromColVectors(x.map((v, i) => i ==
 
 ctab([A, A1, A2, A3].map(m => m.determinant()));
 
+const M = new Matrix(chm[12]);
+const E = M.transpose().rref().fixZeroes();
+
+printRowOperations(E.erops);
+ctab(M)
+ctab(E);
