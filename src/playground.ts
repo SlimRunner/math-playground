@@ -3,6 +3,13 @@ import { Matrix } from "./linear-algebra/Matrix";
 import { Vector } from "./linear-algebra/Vector";
 import { printRowOperations } from "./utilities";
 
+/*
+You might want to create unit tests to aid the refactor
+https://www.testim.io/blog/typescript-unit-testing-101/
+
+Otherwise, this is going to be a hell.
+ */
+
 const ctab = (s:any) => {
   if (s instanceof Matrix || s instanceof Vector) {
     console.table(s.entries);
