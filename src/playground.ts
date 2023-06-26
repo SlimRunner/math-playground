@@ -1,3 +1,4 @@
+import { RationalNumber } from "./arithmetic/RationalNumber";
 import { Matrix } from "./linear-algebra/Matrix";
 import { Vector } from "./linear-algebra/Vector";
 import { printRowOperations } from "./utilities";
@@ -52,3 +53,10 @@ const E = M.transpose().rref().fixZeroes();
 printRowOperations(E.erops);
 ctab(M)
 ctab(E);
+
+const n1 = new RationalNumber(-1, 21);
+const n2 = new RationalNumber(3, -7);
+ctab(n1);
+ctab(n2);
+ctab(n1.add(n2).fixSigns());
+ctab(n1.subtract(n2).fixSigns());
