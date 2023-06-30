@@ -29,5 +29,12 @@
 
     /* Completeness */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  }
+  },
+  "include": [
+    "./**/*"
+  ],
+  "exclude": [
+    "jest.config.js",
+    "./tests/**/*"
+  ]
 }
