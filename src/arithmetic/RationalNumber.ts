@@ -59,6 +59,14 @@ export class RationalNumber
     );
   }
 
+  modulo(rhs: RationalNumber) {
+    let a = this.numerator * rhs.denominator;
+    let b = this.denominator * rhs.numerator;
+    let factor = Math.trunc(Math.abs(a / b));
+    const offset = rhs.multiply(new RationalNumber(factor, 1));
+    return this.subtract(offset);
+  }
+
   fixSigns() {
     const negative = this.numerator < 0 !== this.denominator < 0;
     const a = Math.abs(this.numerator) * (negative ? -1 : 1);
