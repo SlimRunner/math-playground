@@ -1,4 +1,4 @@
-import { Additive, Multiplicative, Invertible } from "../interfaces";
+import { Additive, Multiplicative, Divisible } from "../interfaces";
 
 function gcd(a: number, b: number) {
   a = Math.abs(a);
@@ -13,7 +13,7 @@ export class RationalNumber
   implements
     Additive<RationalNumber>,
     Multiplicative<RationalNumber>,
-    Invertible<RationalNumber>
+    Divisible<RationalNumber>
 {
   numerator: number;
   denominator: number;

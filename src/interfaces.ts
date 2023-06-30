@@ -7,6 +7,6 @@ export interface Multiplicative<T> {
   multiply(rhs: T): T;
 }
 
-export interface Invertible<T> {
+export interface Divisible<T> {
   divide(rhs: T): T;
 }
