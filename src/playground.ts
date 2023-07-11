@@ -1,7 +1,7 @@
 import { RationalNumber } from "./arithmetic/RationalNumber";
 import { Matrix } from "./linear-algebra/Matrix";
 import { Vector } from "./linear-algebra/Vector";
-import { printRowOperations } from "./utilities";
+import { printRowOperations, range } from "./utilities";
 
 /*
 You might want to create unit tests to aid the refactor
@@ -42,28 +42,4 @@ const chm = {
   106:[[1,0,0,-1,100],[1,-1,0,0,-100],[0,1,-1,0,-100],[0,0,1,-1,300]]
 }
 
-
-const x = [
-  new Vector([1,2,-1]),
-  new Vector([2,-2,3]),
-  new Vector([-1,-2,4]),
-]
-const b = new Vector([-7,-8,8]);
-const A = Matrix.fromColVectors(x);
-const [A1, A2, A3] = [0,1,2].map(n => Matrix.fromColVectors(x.map((v, i) => i === n ? b : v)));
-
-ctab([A, A1, A2, A3].map(m => m.determinant()));
-
-const M = new Matrix(chm[12]);
-const E = M.transpose().rref().fixZeroes();
-
-printRowOperations(E.erops);
-ctab(M)
-ctab(E);
-
-const n1 = new RationalNumber(-1, 21);
-const n2 = new RationalNumber(3, -7);
-ctab(n1);
-ctab(n2);
-ctab(n1.add(n2).fixSigns());
-ctab(n1.subtract(n2).fixSigns());
+// :)

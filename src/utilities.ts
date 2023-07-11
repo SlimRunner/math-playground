@@ -43,3 +43,22 @@ export function printRowOperations(erops: ElemRowOp[]) {
   }
   console.log(`%c${logErop.join("\n")}`, "font-size: large");
 }
+
+export function* range(start:number, end:number, step:number, offset:number = 0) {
+  if (start === end) {
+    yield start;
+    return;
+  }
+  const mod = (n:number, m:number) => (n * m >= 0 ? n % m : n % m + m);
+  let i = start;
+  let n = mod(offset, step);
+  let s = Math.sign(end - start);
+  if (i % step !== n) {
+    i += (s >= 0 ? step - mod(i - n, step) : -mod(i - n, step));
+    if (!(s >= 0 ? (i <= end) : (i >= end))) return;
+  }
+  while ((s >= 0 ? (i <= end) : (i >= end))) {
+    yield i;
+    i += s * step;
+  }
+}
