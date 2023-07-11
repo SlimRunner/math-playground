@@ -59,12 +59,26 @@ export class RationalNumber
     );
   }
 
+  abs() {
+    return new RationalNumber(
+      Math.abs(this.numerator),
+      Math.abs(this.denominator)
+    );
+  }
+
   modulo(rhs: RationalNumber) {
     let a = this.numerator * rhs.denominator;
     let b = this.denominator * rhs.numerator;
     let factor = Math.trunc(Math.abs(a / b));
     const offset = rhs.multiply(new RationalNumber(factor, 1));
     return this.subtract(offset);
+  }
+
+  scale(factor: number) {
+    if (!Number.isInteger(factor)) {
+      throw TypeError("Rational number operands must be integral.");
+    }
+    return new RationalNumber(this.numerator * factor, this.denominator);
   }
 
   fixSigns() {
