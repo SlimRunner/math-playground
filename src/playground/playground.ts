@@ -2,7 +2,8 @@ import { RationalNumber } from "../arithmetic/RationalNumber";
 import { Matrix } from "../linear-algebra/Matrix";
 import { Vector } from "../linear-algebra/Vector";
 import { printRowOperations, range } from "./utilities";
-import { getHSVfromRGB } from "./modules";
+import { getHSVfromRGB, getRGBfromHSV } from "./modules";
+import { RealNumber } from "../arithmetic/RealNumber";
 
 /*
 You might want to create unit tests to aid the refactor
@@ -55,7 +56,8 @@ const chm = {
 const RGB = [123,128,78].map((n) => new RationalNumber(n, 255));
 
 // @ts-ignore
-clog(getHSVfromRGB(...RGB).map(n => {
+clog(getRGBfromHSV(...getHSVfromRGB(...RGB)).map(n => {
+  n = n.scale(255);
   if (n.isInteger()) {
     return n.toInteger().toLatex();
   } else {
