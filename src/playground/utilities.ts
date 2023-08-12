@@ -1,5 +1,5 @@
-import { ElemRowOp } from "./linear-algebra/Matrix";
-import { RowOpType } from "./linear-algebra/Matrix";
+import { ElemRowOp } from "../linear-algebra/Matrix";
+import { RowOpType } from "../linear-algebra/Matrix";
 
 function uSubscript(num: number) {
   return num

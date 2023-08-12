@@ -1,7 +1,8 @@
-import { RationalNumber } from "./arithmetic/RationalNumber";
-import { Matrix } from "./linear-algebra/Matrix";
-import { Vector } from "./linear-algebra/Vector";
+import { RationalNumber } from "../arithmetic/RationalNumber";
+import { Matrix } from "../linear-algebra/Matrix";
+import { Vector } from "../linear-algebra/Vector";
 import { printRowOperations, range } from "./utilities";
+import { getHSVfromRGB } from "./modules";
 
 /*
 You might want to create unit tests to aid the refactor
@@ -41,5 +42,25 @@ const chm = {
   105:[[2,3,1,1,0,0],[3,3,1,0,1,0],[2,4,1,0,0,1]],
   106:[[1,0,0,-1,100],[1,-1,0,0,-100],[0,1,-1,0,-100],[0,0,1,-1,300]]
 }
+
+// const num = new RationalNumber(453, 789);
+// clog(num.toString());
+
+// const base = 12;
+// const factor = 7 * 5;
+// const denomSign = -1;
+// const obj = new RationalNumber(base * factor, denomSign * factor);
+// clog(obj.isInteger());
+
+const RGB = [123,128,78].map((n) => new RationalNumber(n, 255));
+
+// @ts-ignore
+clog(getHSVfromRGB(...RGB).map(n => {
+  if (n.isInteger()) {
+    return n.toInteger().toLatex();
+  } else {
+    return n.toLatex();
+  }
+}).join(', '));
 
 // :)
