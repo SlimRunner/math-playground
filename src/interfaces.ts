@@ -30,6 +30,10 @@ export interface Divisible<T> {
   divide(rhs: T): T;
 }
 
+export interface Congruent<T> {
+  mod(rhs: T): T;
+}
+
 export interface Comparable<T> {
   compare(rhs: T): number;
 }

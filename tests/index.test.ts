@@ -1,7 +1,6 @@
 import { Matrix } from "../src/linear-algebra/Matrix";
 import { RationalNumber } from "../src/arithmetic/RationalNumber";
-import assert from "assert";
-// import { RealNumber } from "../src/arithmetic/RationalNumber";
+import { RealNumber } from "../src/arithmetic/RealNumber";
 
 describe('Matrix class', () => {
   test('construction of empty Matrix', () => {
@@ -34,10 +33,27 @@ describe('RationalNumber class', () => {
   test('modulo of rational numbers', () => {
     const a = new RationalNumber(123456789, 32547);
     const b = new RationalNumber(33, 105);
-    const obj = a.modulo(b);
-    expect(obj.numerator).toBe(26814);
-    expect(obj.denominator).toBe(379715);
+    const ansNum = [26814, 18505, -18505, -26814];
+    const ansDen = [379715, 75943, 75943, 379715];
+    for (const m of [1, -1]) {
+      for (const n of [1, -1]) {
+        const obj = a.scale(n).mod(b.scale(m));
+        expect(obj.numerator).toBe(ansNum.shift());
+        expect(obj.denominator).toBe(ansDen.shift());
+      }
+    }
   });
+
+  test('edge cases of modulo', () => {
+    const a = new RationalNumber(33, 105);
+    const answers = [0, 0, 0, 0];
+    for (const m of [1, -1]) {
+      for (const n of [1, -1]) {
+        const obj = a.scale(n).mod(a.scale(m));
+        expect(obj.toRealNumber().value).toBe(0);
+      }
+    }
+  })
 
   test('conversion of rational to integer', () => {
     const base = 12;
@@ -56,4 +72,30 @@ describe('RationalNumber class', () => {
     expect(obj.isInteger()).toBe(false);
     expect(() => {obj.toInteger()}).toThrowError(TypeError);
   });
+});
+
+describe('RealNumber class', () => {
+  test('modulo of real numbers', () => {
+    // prepared with https://www.desmos.com/calculator/0tcz1qjdla
+    const a = new RealNumber(7.625);
+    const b = new RealNumber(0.5);
+    const answers = [0.125, 0.375, -0.375, -0.125];
+    for (const m of [1, -1]) {
+      for (const n of [1, -1]) {
+        const obj = a.scale(n).mod(b.scale(m));
+        expect(obj.value).toBe(answers.shift());
+      }
+    }
+  })
+
+  test('edge cases of modulo', () => {
+    const a = new RealNumber(7);
+    const answers = [0, 0, -0, -0];
+    for (const m of [1, -1]) {
+      for (const n of [1, -1]) {
+        const obj = a.scale(n).mod(a.scale(m));
+        expect(obj.value).toBe(answers.shift());
+      }
+    }
+  })
 });

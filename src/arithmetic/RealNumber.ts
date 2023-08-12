@@ -1,4 +1,4 @@
-import { Arithmetic, Comparable } from "../interfaces";
+import { Arithmetic, Comparable, Congruent } from "../interfaces";
 import { RationalNumber } from "./RationalNumber";
 
 /**
@@ -7,7 +7,8 @@ import { RationalNumber } from "./RationalNumber";
 export class RealNumber
   implements
   Arithmetic<RealNumber>,
-  Comparable<RealNumber>
+  Comparable<RealNumber>,
+  Congruent<RealNumber>
 {
   value: number;
 
@@ -45,6 +46,16 @@ export class RealNumber
 
   abs() {
     return Math.abs(this.value);
+  }
+
+  mod(rhs: RealNumber) {
+    const residue = this.value % rhs.value;
+    if (this.value * rhs.value >= 0) {
+      return new RealNumber(residue);
+    } else if (residue === 0) {
+      return new RealNumber(0 * rhs.value);
+    }
+    return new RealNumber(residue + rhs.value);
   }
 
   modulo(rhs: RealNumber) {

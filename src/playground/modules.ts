@@ -27,10 +27,10 @@ function max<T extends Comparable<T>>(...values: T[]) {
 }
 
 export function getHSVfromRGB<T extends Arithmetic<T> & Comparable<T>>(red: T, green: T, blue: T) {
+  const zero = red.getZero();
+  const one = red.getUnity();
   const value: T = max(red, green, blue);
   const range: T = value.subtract(min(red, green, blue));
-  const zero = value.getZero();
-  const one = value.getUnity();
   
   const sat: T = (value.compare(zero) === 0) ? zero : range.divide(value);
   let hue: T = zero;

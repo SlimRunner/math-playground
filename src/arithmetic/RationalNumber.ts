@@ -1,4 +1,4 @@
-import { Arithmetic, Comparable } from "../interfaces";
+import { Arithmetic, Comparable, Congruent } from "../interfaces";
 import { RealNumber } from "./RealNumber";
 
 function gcd(a: number, b: number) {
@@ -13,7 +13,8 @@ function gcd(a: number, b: number) {
 export class RationalNumber
   implements
   Arithmetic<RationalNumber>,
-  Comparable<RationalNumber>
+  Comparable<RationalNumber>,
+  Congruent<RationalNumber>
 {
   numerator: number;
   denominator: number;
@@ -53,6 +54,7 @@ export class RationalNumber
   }
 
   divide(rhs: RationalNumber) {
+    // you might want to compute the GDC before to prevent oveflow
     return new RationalNumber(
       this.numerator * rhs.denominator,
       this.denominator * rhs.numerator
@@ -66,12 +68,17 @@ export class RationalNumber
     );
   }
 
-  modulo(rhs: RationalNumber) {
-    let a = this.numerator * rhs.denominator;
-    let b = this.denominator * rhs.numerator;
-    let factor = Math.trunc(Math.abs(a / b));
-    const offset = rhs.multiply(new RationalNumber(factor, 1));
-    return this.subtract(offset);
+  mod(rhs: RationalNumber) {
+    // https://www.desmos.com/calculator/lcxu6dlrim
+    const num = this.numerator * rhs.denominator;
+    const denom = this.denominator * rhs.numerator;
+    const ratio = num / denom;
+    const factor = Math.abs(ratio);
+    if (ratio >= 0) {
+      return this.subtract((rhs.scale(Math.floor(factor))));
+    } else {
+      return this.add((rhs.scale(Math.ceil(factor))));
+    }
   }
 
   scale(factor: number) {
