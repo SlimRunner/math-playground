@@ -46,7 +46,6 @@ describe('RationalNumber class', () => {
 
   test('edge cases of modulo', () => {
     const a = new RationalNumber(33, 105);
-    const answers = [0, 0, 0, 0];
     for (const m of [1, -1]) {
       for (const n of [1, -1]) {
         const obj = a.scale(n).mod(a.scale(m));
