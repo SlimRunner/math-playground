@@ -58,13 +58,6 @@ export class RealNumber
     return new RealNumber(residue + rhs.value);
   }
 
-  modulo(rhs: RealNumber) {
-    // TODO: add custom modulo function
-    const a = this.value;
-    const b = rhs.value;
-    return new RealNumber(a % b);
-  }
-
   compare(rhs: RealNumber): number {
     return this.value - rhs.value;
   }
