@@ -15,7 +15,7 @@ function min<T extends Comparable<T>>(...values: T[]) {
 
 function max<T extends Comparable<T>>(...values: T[]) {
   if (values.length === 0) {
-    throw SyntaxError("min function must have at least one parameter");
+    throw SyntaxError("max function must have at least one parameter");
   }
   let smallest: T = values.at(0) as T;
   for (const value of values) {
