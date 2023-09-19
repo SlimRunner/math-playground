@@ -45,3 +45,11 @@ export interface Arithmetic<T>
     Scalable<T>,
     HasZero<T>,
     HasUnit<T> {}
+
+export interface Tabular<T> {
+  entries: T[] | T[][];
+}
+
+export interface DiscreteDiscernible<T> {
+  isInteger(): boolean;
+}

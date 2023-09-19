@@ -53,10 +53,10 @@ const chm = {
 // const obj = new RationalNumber(base * factor, denomSign * factor);
 // clog(obj.isInteger());
 
-const RGB = [123,128,78].map((n) => new RationalNumber(n, 255));
+type TriColors = [RationalNumber, RationalNumber, RationalNumber];
+const RGB: TriColors = [123,128,78].map(n => new RationalNumber(n, 255)) as TriColors;
 
-// @ts-ignore
-clog(getRGBfromHSV(...getHSVfromRGB(...RGB)).map(n => {
+clog(getRGBfromHSV(...getHSVfromRGB(...RGB) as TriColors).map(n => {
   n = n.scale(255);
   if (n.isInteger()) {
     return n.toInteger().toLatex();
