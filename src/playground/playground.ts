@@ -1,7 +1,7 @@
 import { RationalNumber } from "../arithmetic/RationalNumber";
 import { Matrix } from "../linear-algebra/Matrix";
 import { Vector } from "../linear-algebra/Vector";
-import { printRowOperations, range } from "../utils/utilities";
+import { printRowOperations, range } from "./utilities";
 import { getHSVfromRGB, getRGBfromHSV } from "../utils/modules";
 import { RealNumber } from "../arithmetic/RealNumber";
 
