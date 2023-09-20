@@ -1,21 +1,5 @@
 import { Matrix } from "./Matrix";
-
-class VectorError extends Error {
-  /* Source
-  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
-  */
-  constructor(msg: string) {
-    // Pass remaining arguments (including vendor specific ones) to parent constructor
-    super(msg);
-
-    // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, VectorError);
-    }
-      
-    this.name = "VectorError";
-  }
-}
+import { VectorError } from "../utilities/error";
 
 export class Vector {
   size: number;
@@ -24,15 +8,23 @@ export class Vector {
   constructor(source: number[] | Matrix) {
     if (source instanceof Matrix) {
       if (source.rows !== 1 && source.columns !== 1) {
-        throw new VectorError(`Input matrix is not a row or column matrix`);
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `a column or a row matrix`,
+          /*, but instead got */ `a ${source.rows}⨯${source.columns} matrix`
+        );
       }
-      this.entries = source.entries.flatMap(e => e);
+      this.entries = source.entries.flatMap((e) => e);
       this.size = Math.max(source.rows, source.columns);
-    } else if(source instanceof Array) {
-      this.entries = source.map(e => e);
+    } else if (source instanceof Array) {
+      this.entries = source.map((e) => e);
       this.size = this.entries.length;
     } else {
-      throw new VectorError(`${typeof source} type not supported to initialize Vector`);
+      throw new VectorError(
+        `Type Error`,
+        /*expected */ `a an array of numbers or a matrix`,
+        /*, but instead got */ `${source}`
+      );
     }
   }
 
@@ -42,13 +34,17 @@ export class Vector {
 
   normalized() {
     const norm = Math.hypot(...this.entries);
-    return new Vector(this.entries.map(ve => ve / norm));
+    return new Vector(this.entries.map((ve) => ve / norm));
   }
 
   add(rhs: Vector) {
     const lhs = new Vector(this.entries);
     if (lhs.size !== rhs.size) {
-      throw new VectorError(`Vectors have incompatible dimensions`);
+      throw new VectorError(
+        `Argument Error`,
+        /*expected */ `vectors of equal dimensions`,
+        /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+      );
     }
     for (let i = 0; i < lhs.size; ++i) {
       lhs.entries[i] += rhs.entries[i];
@@ -59,7 +55,11 @@ export class Vector {
   subtract(rhs: Vector) {
     const lhs = new Vector(this.entries);
     if (lhs.size !== rhs.size) {
-      throw new VectorError(`Vectors have incompatible dimensions`);
+      throw new VectorError(
+        `Argument Error`,
+        /*expected */ `vectors of equal dimensions`,
+        /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+      );
     }
     for (let i = 0; i < lhs.size; ++i) {
       lhs.entries[i] -= rhs.entries[i];
@@ -71,7 +71,11 @@ export class Vector {
     const lhs = new Vector(this.entries);
     if (rhs instanceof Matrix) {
       if (lhs.size !== rhs.rows) {
-        throw new VectorError(`Vector size and Matrix rows have incompatible dimensions`);
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `vector and matrix of compatible dimensions`,
+          /*, but instead got */ `${this.size}-vector and a ${rhs.rows}⨯${rhs.columns} matrix`
+        );
       }
       const prod: number[] = [];
       for (let j = 0; j < rhs.columns; ++j) {
@@ -84,7 +88,11 @@ export class Vector {
     } else {
       // memberwise multiplication ¯\_(ツ)_/¯
       if (lhs.size !== rhs.size) {
-        throw new VectorError(`Vectors have incompatible dimensions`);
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `vectors of equal dimensions`,
+          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+        );
       }
       for (let i = 0; i < lhs.size; ++i) {
         lhs.entries[i] *= rhs.entries[i];
@@ -104,7 +112,11 @@ export class Vector {
   dot(rhs: Vector) {
     if (rhs instanceof Vector) {
       if (this.size !== rhs.size) {
-        throw new VectorError(`Vectors have incompatible dimensions`);
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `vectors of equal dimensions`,
+          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+        );
       }
       let result = 0;
       for (let i = 0; i < this.size; ++i) {
@@ -112,29 +124,50 @@ export class Vector {
       }
       return result;
     }
-    throw new VectorError(`${typeof rhs} type not supported for dot product`);
+    throw new VectorError(
+      `Type Error`,
+      /*expected */ `a vector on the right hand side`,
+      /*, but instead got */ `${rhs}`
+    );
   }
 
   cross(rhs: Vector) {
     if (rhs instanceof Vector) {
       if (this.size !== rhs.size) {
-        throw new VectorError(`Vectors have incompatible dimensions`);
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `vectors of equal dimensions`,
+          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+        );
       }
-      if (this.size > 3 || this.size < 2) {
-        throw new VectorError(`Cross product is only defined for vectors of size 3`);
+      if (this.size != 3) {
+        throw new VectorError(
+          `Argument Error`,
+          /*expected */ `a vector or dimension 3`,
+          /*, but instead got */ `${this.size}-vector for both inputs`
+        );
       }
-      let result = [0,0,0];
-      result[2] = this.entries[0] * rhs.entries[1] - this.entries[1] * rhs.entries[0];
+      let result = [0, 0, 0];
+      result[2] =
+        this.entries[0] * rhs.entries[1] - this.entries[1] * rhs.entries[0];
       if (this.size === 3) {
-        result[0] = this.entries[1] * rhs.entries[2] - this.entries[2] * rhs.entries[1];
-        result[1] = -(this.entries[0] * rhs.entries[2] - this.entries[2] * rhs.entries[0]);
+        result[0] =
+          this.entries[1] * rhs.entries[2] - this.entries[2] * rhs.entries[1];
+        result[1] = -(
+          this.entries[0] * rhs.entries[2] -
+          this.entries[2] * rhs.entries[0]
+        );
       } else {
         result[0] = 0;
         result[1] = 0;
       }
       return new Vector(result);
     }
-    throw new VectorError(`${typeof rhs} type not supported for cross product`);
+    throw new VectorError(
+      `Type Error`,
+      /*expected */ `a vector on the right hand side`,
+      /*, but instead got */ `${rhs}`
+    );
   }
 
   project(a: Vector) {
@@ -144,7 +177,7 @@ export class Vector {
   }
 
   getColumnMatrix() {
-    return new Matrix(this.entries.map(n => [n]));
+    return new Matrix(this.entries.map((n) => [n]));
   }
 
   getRowMatrix() {
