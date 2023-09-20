@@ -1,4 +1,4 @@
-import { min, max } from "./modules";
+import { min, max } from "./comparison";
 import { Arithmetic, Comparable, Congruent } from "../interfaces";
 
 export function rgb2hsv<T extends Arithmetic<T> & Comparable<T>>(

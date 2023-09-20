@@ -1,8 +1,8 @@
 import { RationalNumber } from "../arithmetic/RationalNumber";
 import { Matrix } from "../linear-algebra/Matrix";
 import { Vector } from "../linear-algebra/Vector";
-import { printRowOperations, range } from "./utilities";
-import { rgb2hsv, hsv2rgb } from "../utils/color";
+import { printRowOperations, range } from "./helpers";
+import { rgb2hsv, hsv2rgb } from "../utilities/color";
 import { RealNumber } from "../arithmetic/RealNumber";
 
 /*
