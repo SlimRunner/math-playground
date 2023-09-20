@@ -2,7 +2,7 @@ import { RationalNumber } from "../arithmetic/RationalNumber";
 import { Matrix } from "../linear-algebra/Matrix";
 import { Vector } from "../linear-algebra/Vector";
 import { printRowOperations, range } from "./utilities";
-import { getHSVfromRGB, getRGBfromHSV } from "../utils/modules";
+import { rgb2hsv, hsv2rgb } from "../utils/color";
 import { RealNumber } from "../arithmetic/RealNumber";
 
 /*
@@ -56,7 +56,7 @@ const chm = {
 type TriColors = [RationalNumber, RationalNumber, RationalNumber];
 const RGB: TriColors = [123,128,78].map(n => new RationalNumber(n, 255)) as TriColors;
 
-clog(getRGBfromHSV(...getHSVfromRGB(...RGB) as TriColors).map(n => {
+clog(hsv2rgb(...rgb2hsv(...RGB) as TriColors).map(n => {
   n = n.scale(255);
   if (n.isInteger()) {
     return n.toInteger().toLatex();
