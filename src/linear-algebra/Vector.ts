@@ -1,5 +1,5 @@
 import { Matrix } from "./Matrix";
-import { VectorError } from "../utilities/error";
+import { VectorError, formatType } from "../utilities/error";
 
 export class Vector {
   size: number;
@@ -22,8 +22,8 @@ export class Vector {
     } else {
       throw new VectorError(
         `Type Error`,
-        /*expected */ `a an array of numbers or a matrix`,
-        /*, but instead got */ `${source}`
+        /*expected */ `an array of numbers or a matrix`,
+        /*, but instead got */ `${formatType(source)}`
       );
     }
   }
@@ -42,8 +42,8 @@ export class Vector {
     if (lhs.size !== rhs.size) {
       throw new VectorError(
         `Argument Error`,
-        /*expected */ `vectors of equal dimensions`,
-        /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+        /*expected */ `a ${this.size}-vector`,
+        /*, but instead got */ `a ${rhs.size}-vector`
       );
     }
     for (let i = 0; i < lhs.size; ++i) {
@@ -57,8 +57,8 @@ export class Vector {
     if (lhs.size !== rhs.size) {
       throw new VectorError(
         `Argument Error`,
-        /*expected */ `vectors of equal dimensions`,
-        /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+        /*expected */ `a ${this.size}-vector`,
+        /*, but instead got */ `a ${rhs.size}-vector`
       );
     }
     for (let i = 0; i < lhs.size; ++i) {
@@ -70,11 +70,12 @@ export class Vector {
   multiply(rhs: Vector | Matrix) {
     const lhs = new Vector(this.entries);
     if (rhs instanceof Matrix) {
+      // assumes lhs is a row matrix
       if (lhs.size !== rhs.rows) {
         throw new VectorError(
           `Argument Error`,
-          /*expected */ `vector and matrix of compatible dimensions`,
-          /*, but instead got */ `${this.size}-vector and a ${rhs.rows}⨯${rhs.columns} matrix`
+          /*expected */ `a ${this.size}⨯m matrix`,
+          /*, but instead got */ `a ${rhs.rows}⨯${rhs.columns} matrix`
         );
       }
       const prod: number[] = [];
@@ -90,8 +91,8 @@ export class Vector {
       if (lhs.size !== rhs.size) {
         throw new VectorError(
           `Argument Error`,
-          /*expected */ `vectors of equal dimensions`,
-          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+          /*expected */ `a ${this.size}-vector`,
+          /*, but instead got */ `a ${rhs.size}-vector`
         );
       }
       for (let i = 0; i < lhs.size; ++i) {
@@ -114,8 +115,8 @@ export class Vector {
       if (this.size !== rhs.size) {
         throw new VectorError(
           `Argument Error`,
-          /*expected */ `vectors of equal dimensions`,
-          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+          /*expected */ `a ${this.size}-vector`,
+          /*, but instead got */ `a ${rhs.size}-vector`
         );
       }
       let result = 0;
@@ -127,7 +128,7 @@ export class Vector {
     throw new VectorError(
       `Type Error`,
       /*expected */ `a vector on the right hand side`,
-      /*, but instead got */ `${rhs}`
+      /*, but instead got */ `${formatType(rhs)}`
     );
   }
 
@@ -136,15 +137,15 @@ export class Vector {
       if (this.size !== rhs.size) {
         throw new VectorError(
           `Argument Error`,
-          /*expected */ `vectors of equal dimensions`,
-          /*, but instead got */ `${this.size}-vector and a ${rhs.size}-vector`
+          /*expected */ `a ${this.size}-vector`,
+          /*, but instead got */ `a ${rhs.size}-vector`
         );
       }
       if (this.size != 3) {
         throw new VectorError(
           `Argument Error`,
-          /*expected */ `a vector or dimension 3`,
-          /*, but instead got */ `${this.size}-vector for both inputs`
+          /*expected */ `vectors or dimension 3`,
+          /*, but instead got */ `${this.size}-vectors were provided`
         );
       }
       let result = [0, 0, 0];
@@ -166,7 +167,7 @@ export class Vector {
     throw new VectorError(
       `Type Error`,
       /*expected */ `a vector on the right hand side`,
-      /*, but instead got */ `${rhs}`
+      /*, but instead got */ `${formatType(rhs)}`
     );
   }
 

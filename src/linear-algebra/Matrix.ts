@@ -1,22 +1,6 @@
 import { resourceUsage } from "process";
 import { Vector } from "./Vector";
-
-class MatrixError extends Error {
-  /* Source
-  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
-  */
-  constructor(msg: string) {
-    // Pass remaining arguments (including vendor specific ones) to parent constructor
-    super(msg);
-
-    // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, MatrixError);
-    }
-      
-    this.name = "MatrixError";
-  }
-}
+import { MatrixError, formatType } from "../utilities/error";
 
 export enum RowOpType {
   AddRow,
@@ -61,7 +45,11 @@ export class Matrix {
 
   constructor(cells: number[][]) {
     if (!(cells instanceof Array)) {
-      throw new MatrixError(`${typeof cells} type not supported to initialize Matrix`);
+      throw new MatrixError(
+        `Type Error`,
+        /*expected */ `an argument of type number[][]`,
+        /*, but instead got */ `${formatType(cells)}`
+      );
     }
     const ROWS = cells.length;
     const COLS = Math.max.apply(Math, cells.map(c => c.length));
@@ -334,7 +322,11 @@ export class Matrix {
   add(rhs: Matrix) {
     const lhs = new Matrix(this.entries);
     if (lhs.rows !== rhs.rows || lhs.columns !== rhs.columns) {
-      throw new MatrixError("Matices have incompatible sizes for addition");
+      throw new MatrixError(
+        `Argument Error`,
+        /*expected */ `a ${this.rows}⨯${this.columns} matrix`,
+        /*, but instead got */ `a ${rhs.rows}⨯${rhs.columns} matrix`
+      );
     }
     for (let i = 0; i < lhs.rows; ++i) {
       for (let j = 0; j < lhs.columns; ++j) {
@@ -347,7 +339,11 @@ export class Matrix {
   subtract(rhs: Matrix) {
     const lhs = new Matrix(this.entries);
     if (lhs.rows !== rhs.rows || lhs.columns !== rhs.columns) {
-      throw new MatrixError("Matices have incompatible sizes for subtraction");
+      throw new MatrixError(
+        `Argument Error`,
+        /*expected */ `a ${this.rows}⨯${this.columns} matrix`,
+        /*, but instead got */ `a ${rhs.rows}⨯${rhs.columns} matrix`
+      );
     }
     for (let i = 0; i < lhs.rows; ++i) {
       for (let j = 0; j < lhs.columns; ++j) {
@@ -362,7 +358,11 @@ export class Matrix {
     const lhs = new Matrix(this.entries);
     if (rhs instanceof Matrix) {
       if (lhs.columns !== rhs.rows) {
-        throw new MatrixError("Matices have incompatible sizes for multiplication");
+        throw new MatrixError(
+          `Argument Error`,
+          /*expected */ `a ${this.columns}⨯${this.rows} matrix`,
+          /*, but instead got */ `a ${rhs.rows}⨯${rhs.columns} matrix`
+        );
       }
       const prod: number[][] = [];
       for (let i = 0; i < lhs.rows; ++i) {
@@ -377,7 +377,11 @@ export class Matrix {
       return new Matrix(prod);
     } else {
       if (lhs.columns !== rhs.size) {
-        throw new MatrixError("Matrix columns and Vector size have incompatible dimensions");
+        throw new MatrixError(
+          `Argument Error`,
+          /*expected */ `a ${this.columns}-vector`,
+          /*, but instead got */ `a ${rhs.size}-vector`
+        );
       }
       const prod = [];
       for (let i = 0; i < lhs.rows; ++i) {
@@ -425,14 +429,22 @@ export class Matrix {
     if (this.isSquare()) {
       return this.submatrix(atRow, atColumn).determinant() as number;
     }
-    throw new MatrixError("Only square matrices have minors");
+    throw new MatrixError(
+      `Argument Error`,
+      /*expected */ `a square matrix`,
+      /*, but instead got */ `a ${this.rows}⨯${this.columns} matrix`
+    );
   }
 
   cofactor(atRow = 0, atColumn = 0) {
     if (this.isSquare()) {
       return ((atRow + atColumn) % 2 ? -1 : 1) * this.minor(atRow, atColumn);
     }
-    throw new MatrixError("Only square matrices have cofactors");
+    throw new MatrixError(
+      `Argument Error`,
+      /*expected */ `a square matrix`,
+      /*, but instead got */ `a ${this.rows}⨯${this.columns} matrix`
+    );
   }
 
   comatrix() {
@@ -478,7 +490,11 @@ export class Matrix {
   augment(mtx: Matrix) {
     const result = new Matrix(this.entries);
     if (result.rows !== mtx.rows) {
-      throw new MatrixError("Cannot augment with a matrix of mismatched rows.");
+      throw new MatrixError(
+        `Argument Error`,
+        /*expected */ `a ${this.rows}⨯m matrix`,
+        /*, but instead got */ `a ${mtx.rows}⨯${mtx.columns} matrix`
+      );
     } else {
       const newColumns = Math.max.apply(Math, mtx.entries.map(r => r.length));
       for (let i = 0; i < result.rows; ++i) {
@@ -498,7 +514,11 @@ export class Matrix {
       const M = new Matrix(newColumns)
       return M;
     }
-    throw new MatrixError("Slice limits are out of range");
+    throw new MatrixError(
+      `Out of Range Error`,
+      /*expected */ `numbers between ${0} and ${this.columns - 1} where from < to`,
+      /*, but instead got */ `a range from ${from} to ${to}`
+    );
   }
 
   static copy(mtx: Matrix) {
@@ -543,7 +563,11 @@ export class Matrix {
     const entries: number[][] = [];
     for (let i = 0; i < vectors[0].size; ++i) {
       if (i === 0 && size !== vectors[i].size) {
-        throw new MatrixError("All row vectors must have the same size.");
+        throw new MatrixError(
+          `Argument Error`,
+          /*expected */ `all row vectors to have the same size`,
+          /*, but instead got */ `vectors of different sizes`
+        );
       }
       entries.push(vectors[i].entries);
     }
@@ -557,7 +581,11 @@ export class Matrix {
       entries.push([]);
       for (let j = 0; j < vectors.length; ++j) {
         if (i === 0 && size !== vectors[j].size) {
-          throw new MatrixError("All column vectors must have the same size.");
+          throw new MatrixError(
+            `Argument Error`,
+            /*expected */ `all column vectors to have the same size`,
+            /*, but instead got */ `vectors of different sizes`
+          );
         }
         entries[i].push(vectors[j].entries[i]);
       }

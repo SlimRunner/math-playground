@@ -4,6 +4,7 @@ import { Vector } from "../linear-algebra/Vector";
 import { printRowOperations, range } from "./helpers";
 import { rgb2hsv, hsv2rgb } from "../utilities/color";
 import { RealNumber } from "../arithmetic/RealNumber";
+import { VectorError, MatrixError } from "../utilities/error";
 
 /*
 You might want to create unit tests to aid the refactor
@@ -64,5 +65,19 @@ clog(hsv2rgb(...rgb2hsv(...RGB) as TriColors).map(n => {
     return n.toLatex();
   }
 }).join(', '));
+
+const a = new Vector([1,2,3,4]);
+const b = new Matrix(chm[1]);
+
+try {
+  const c = a.multiply(b);
+} catch (err) {
+  if (err instanceof VectorError || err instanceof MatrixError) {
+    console.error(err.what());
+  } else {
+    console.error(err);
+  }
+}
+
 
 // :)
