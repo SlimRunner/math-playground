@@ -56,8 +56,9 @@ const chm = {
 
 type TriColors = [RationalNumber, RationalNumber, RationalNumber];
 const RGB: TriColors = [123,128,78].map(n => new RationalNumber(n, 255)) as TriColors;
+const HSV: TriColors = rgb2hsv(...RGB) as TriColors;
 
-clog(hsv2rgb(...rgb2hsv(...RGB) as TriColors).map(n => {
+clog(hsv2rgb(...HSV).map(n => {
   n = n.scale(255);
   if (n.isInteger()) {
     return n.toInteger().toLatex();
@@ -65,19 +66,5 @@ clog(hsv2rgb(...rgb2hsv(...RGB) as TriColors).map(n => {
     return n.toLatex();
   }
 }).join(', '));
-
-const a = new Vector([1,2,3,4]);
-const b = new Matrix(chm[1]);
-
-try {
-  const c = a.multiply(b);
-} catch (err) {
-  if (err instanceof VectorError || err instanceof MatrixError) {
-    console.error(err.what());
-  } else {
-    console.error(err);
-  }
-}
-
 
 // :)

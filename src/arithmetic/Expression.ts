@@ -1,6 +1,6 @@
 
-export class Expression {
-  tokens: number[];
+export class Expression<T> {
+  tokens: T[];
 
   constructor(expression: string) {
     this.tokens = [];
