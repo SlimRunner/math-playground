@@ -115,10 +115,16 @@ export class RationalNumber
   }
 
   toString() {
+    if (this.denominator === 1) {
+      return this.numerator.toString();
+    }
     return `${this.numerator.toString()} / ${this.denominator.toString()}`;
   }
 
   toLatex() {
+    if (this.denominator === 1) {
+      return this.numerator.toString();
+    }
     return String.raw`\frac{${this.numerator.toString()}}{${this.denominator.toString()}}`;
   }
 
