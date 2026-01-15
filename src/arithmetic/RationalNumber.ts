@@ -120,6 +120,9 @@ export class RationalNumber
   }
 
   toString() {
+    if (this.numerator === 0) {
+      return this.numerator.toString();
+    }
     if (this.denominator === 1) {
       return this.numerator.toString();
     }

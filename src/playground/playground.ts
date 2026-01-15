@@ -20,7 +20,7 @@ const ctab = (s:any) => {
 const clog = console.log;
 const plog = (...s: Array<any>) => {
   if (s.length > 0 && s.every(e => e instanceof RationalNumber)) {
-    clog(...s.map(e => `${e.numerator}/${e.denominator}`));
+    clog(...s.map(e => e.toString()));
   } else {
     clog(...s);
   }
