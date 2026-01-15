@@ -15,13 +15,10 @@ function lcm(a: number, b: number) {
   return (a * b) / gcd(a, b);
 }
 
-export function lcm_Q(a: RationalNumber, b: RationalNumber): number {
+export function lcm_Q(a: RationalNumber, b: RationalNumber): RationalNumber {
   const Q = lcm(a.denominator, b.denominator);
-  const A = a.scale(Q).toInteger().value;
-  const B = b.scale(Q).toInteger().value;
-  const T = lcm(A, B);
-  if (T % Q !== 0) {
-    throw EvalError("Assertion failed: T % Q == 0");
-  }
-  return T / Q;
+  const A = a.scale(Q);
+  const B = b.scale(Q);
+  const T = lcm(A.toInteger().value, B.toInteger().value);
+  return new RationalNumber(T, Q);
 }
