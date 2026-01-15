@@ -66,21 +66,57 @@ export class Quaternion implements Arithmetic<Quaternion> {
   }
 
   divide(rhs: Quaternion): Quaternion {
-    // TODO: hard code
-    return this.multiply(rhs.conjugate()).scale(1 / rhs.multiply(rhs.conjugate()).real);
+    const [a, b, c, d] = [
+      this.real * rhs.real +
+        this.imag_i * rhs.imag_i +
+        this.imag_j * rhs.imag_j +
+        this.imag_k * rhs.imag_k,
+      -this.real * rhs.imag_i +
+        this.imag_i * rhs.real -
+        this.imag_j * rhs.imag_k +
+        this.imag_k * rhs.imag_j,
+      -this.real * rhs.imag_j +
+        this.imag_i * rhs.imag_k +
+        this.imag_j * rhs.real -
+        this.imag_k * rhs.imag_i,
+      -this.real * rhs.imag_k -
+        this.imag_i * rhs.imag_j +
+        this.imag_j * rhs.imag_i +
+        this.imag_k * rhs.real,
+    ];
+    const denom =
+      rhs.real * rhs.real +
+      rhs.imag_i * rhs.imag_i +
+      rhs.imag_j * rhs.imag_j +
+      rhs.imag_k * rhs.imag_k;
+    return new Quaternion(a / denom, b / denom, c / denom, d / denom);
   }
 
   conjugate() {
     return new Quaternion(this.real, -this.imag_i, -this.imag_j, -this.imag_k);
   }
 
-  norm() {
+  normSq() {
     // TODO: hard code
-    return Math.sqrt(this.multiply(this.conjugate()).real);
+    return (
+      this.real * this.real +
+      this.imag_i * this.imag_i +
+      this.imag_j * this.imag_j +
+      this.imag_k * this.imag_k
+    );
+  }
+
+  norm() {
+    // hypot is more numerically stable but slower
+    return Math.sqrt(
+      this.real * this.real +
+        this.imag_i * this.imag_i +
+        this.imag_j * this.imag_j +
+        this.imag_k * this.imag_k
+    );
   }
 
   normalized() {
-    // TODO: hard code
     return this.scale(1 / this.norm());
   }
 
