@@ -49,3 +49,4 @@ export function formatType(input: any) {
 
 export const MatrixError = createError("MatrixError");
 export const VectorError = createError("VectorError");
+export const QuaternionError = createError("QuaternionError");

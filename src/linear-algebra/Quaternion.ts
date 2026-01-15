@@ -1,0 +1,95 @@
+import { Arithmetic, ArithmeticIdentities } from "../interfaces";
+import { QuaternionError, formatType } from "../utilities/error";
+
+// this library is meant to be standalone hence why it does not use any
+// of the other libraries.
+
+export class Quaternion implements Arithmetic<Quaternion> {
+  readonly real: number;
+  readonly imag_i: number;
+  readonly imag_j: number;
+  readonly imag_k: number;
+
+  constructor(a: number, b: number, c: number, d: number) {
+    this.real = a;
+    this.imag_i = b;
+    this.imag_j = c;
+    this.imag_k = d;
+  }
+
+  add(rhs: Quaternion): Quaternion {
+    return new Quaternion(
+      this.real + rhs.real,
+      this.imag_i + rhs.imag_i,
+      this.imag_j + rhs.imag_j,
+      this.imag_k + rhs.imag_k
+    );
+  }
+
+  subtract(rhs: Quaternion): Quaternion {
+    return new Quaternion(
+      this.real - rhs.real,
+      this.imag_i - rhs.imag_i,
+      this.imag_j - rhs.imag_j,
+      this.imag_k - rhs.imag_k
+    );
+  }
+
+  scale(factor: number): Quaternion {
+    return new Quaternion(
+      factor * this.real,
+      factor * this.imag_i,
+      factor * this.imag_j,
+      factor * this.imag_k
+    );
+  }
+
+  multiply(rhs: Quaternion): Quaternion {
+    return new Quaternion(
+      this.real * rhs.real -
+        this.imag_i * rhs.imag_i -
+        this.imag_j * rhs.imag_j -
+        this.imag_k * rhs.imag_k,
+      this.real * rhs.imag_i +
+        this.imag_i * rhs.real +
+        this.imag_j * rhs.imag_k -
+        this.imag_k * rhs.imag_j,
+      this.real * rhs.imag_j -
+        this.imag_i * rhs.imag_k +
+        this.imag_j * rhs.real +
+        this.imag_k * rhs.imag_i,
+      this.real * rhs.imag_k +
+        this.imag_i * rhs.imag_j -
+        this.imag_j * rhs.imag_i +
+        this.imag_k * rhs.real
+    );
+  }
+
+  divide(rhs: Quaternion): Quaternion {
+    // TODO: hard code
+    return this.multiply(rhs.conjugate()).scale(1 / rhs.multiply(rhs.conjugate()).real);
+  }
+
+  conjugate() {
+    return new Quaternion(this.real, -this.imag_i, -this.imag_j, -this.imag_k);
+  }
+
+  norm() {
+    // TODO: hard code
+    return Math.sqrt(this.multiply(this.conjugate()).real);
+  }
+
+  normalized() {
+    // TODO: hard code
+    return this.scale(1 / this.norm());
+  }
+
+  toArray() {
+    return [this.real, this.imag_i, this.imag_j, this.imag_k];
+  }
+
+  static readonly ZERO = new Quaternion(0, 0, 0, 0);
+  static readonly ONE = new Quaternion(1, 0, 0, 0);
+}
+
+Quaternion satisfies ArithmeticIdentities<Quaternion>;
