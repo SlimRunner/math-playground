@@ -44,7 +44,7 @@ export function printRowOperations(erops: ElemRowOp[]) {
   console.log(`%c${logErop.join("\n")}`, "font-size: large");
 }
 
-export function* divRange(
+export function* divSet(
   start: number,
   end: number,
   divisor: number,
