@@ -1,4 +1,9 @@
-import { Arithmetic, Comparable, Congruent } from "../interfaces";
+import {
+  Arithmetic,
+  ArithmeticIdentities,
+  Comparable,
+  Congruent,
+} from "../interfaces";
 import { RealNumber } from "./RealNumber";
 
 function gcd(a: number, b: number) {
@@ -128,11 +133,8 @@ export class RationalNumber
     return String.raw`\frac{${this.numerator.toString()}}{${this.denominator.toString()}}`;
   }
 
-  getZero(): RationalNumber {
-    return new RationalNumber(0, 1);
-  }
-
-  getUnity(): RationalNumber {
-    return new RationalNumber(1, 1);
-  }
+  static readonly ZERO = new RationalNumber(0, 1);
+  static readonly ONE = new RationalNumber(1, 1);
 }
+
+RationalNumber satisfies ArithmeticIdentities<RationalNumber>;

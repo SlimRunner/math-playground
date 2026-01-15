@@ -1,4 +1,4 @@
-import { Arithmetic, Comparable, Congruent } from "../interfaces";
+import { Arithmetic, ArithmeticIdentities, Comparable, Congruent } from "../interfaces";
 import { RationalNumber } from "./RationalNumber";
 
 /**
@@ -77,11 +77,8 @@ export class RealNumber
     return this.value.toString();
   }
 
-  getZero(): RealNumber {
-    return new RealNumber(0);
-  }
-
-  getUnity(): RealNumber {
-    return new RealNumber(1);
-  }
+  static readonly ZERO = new RealNumber(0);
+  static readonly ONE = new RealNumber(1);
 }
+
+RealNumber satisfies ArithmeticIdentities<RealNumber>;

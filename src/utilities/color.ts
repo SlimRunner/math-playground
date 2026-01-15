@@ -1,13 +1,19 @@
 import { min, max } from "./comparison";
-import { Arithmetic, Comparable, Congruent } from "../interfaces";
+import {
+  Arithmetic,
+  ArithmeticIdentities,
+  Comparable,
+  Congruent,
+} from "../interfaces";
 
 export function rgb2hsv<T extends Arithmetic<T> & Comparable<T>>(
   red: T,
   green: T,
-  blue: T
+  blue: T,
+  ctor: ArithmeticIdentities<T>
 ) {
-  const zero = red.getZero();
-  const one = red.getUnity();
+  const zero = ctor.ZERO;
+  const one = ctor.ONE;
   const value: T = max(red, green, blue);
   const range: T = value.subtract(min(red, green, blue));
 
@@ -28,10 +34,11 @@ export function rgb2hsv<T extends Arithmetic<T> & Comparable<T>>(
 export function hsv2rgb<T extends Arithmetic<T> & Comparable<T> & Congruent<T>>(
   hue: T,
   sat: T,
-  value: T
+  value: T,
+  ctor: ArithmeticIdentities<T>
 ) {
-  const zero = hue.getZero();
-  const one = hue.getUnity();
+  const zero = ctor.ZERO;
+  const one = ctor.ONE;
   const vsRatio: T = value.multiply(sat);
 
   return [5, 3, 1]
