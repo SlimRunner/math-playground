@@ -17,9 +17,9 @@ function gcd(a: number, b: number) {
 
 export class RationalNumber
   implements
-  Arithmetic<RationalNumber>,
-  Comparable<RationalNumber>,
-  Congruent<RationalNumber>
+    Arithmetic<RationalNumber>,
+    Comparable<RationalNumber>,
+    Congruent<RationalNumber>
 {
   numerator: number;
   denominator: number;
@@ -80,9 +80,9 @@ export class RationalNumber
     const ratio = num / denom;
     const factor = Math.abs(ratio);
     if (ratio >= 0) {
-      return this.subtract((rhs.scale(Math.floor(factor))));
+      return this.subtract(rhs.scale(Math.floor(factor)));
     } else {
-      return this.add((rhs.scale(Math.ceil(factor))));
+      return this.add(rhs.scale(Math.ceil(factor)));
     }
   }
 
@@ -94,7 +94,7 @@ export class RationalNumber
   }
 
   compare(rhs: RationalNumber): number {
-    return (this.numerator / this.denominator) - (rhs.numerator / rhs.denominator);
+    return this.numerator / this.denominator - rhs.numerator / rhs.denominator;
   }
 
   isInteger() {
