@@ -10,7 +10,7 @@ export class RealNumber
   Comparable<RealNumber>,
   Congruent<RealNumber>
 {
-  value: number;
+  readonly value: number;
 
   constructor(value: number) {
     this.value = value;

@@ -21,8 +21,8 @@ export class RationalNumber
     Comparable<RationalNumber>,
     Congruent<RationalNumber>
 {
-  numerator: number;
-  denominator: number;
+  readonly numerator: number;
+  readonly denominator: number;
 
   constructor(numerator: number, denominator: number) {
     if (!Number.isInteger(numerator) || !Number.isInteger(denominator)) {
