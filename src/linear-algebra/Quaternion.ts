@@ -1,10 +1,12 @@
-import { Arithmetic, ArithmeticIdentities } from "../interfaces";
+import { Arithmetic, ArithmeticIdentities, Equatable } from "../interfaces";
 import { QuaternionError, formatType } from "../utilities/error";
 
 // this library is meant to be standalone hence why it does not use any
 // of the other libraries.
 
-export class Quaternion implements Arithmetic<Quaternion> {
+export class Quaternion
+  implements Arithmetic<Quaternion>, Equatable<Quaternion>
+{
   readonly real: number;
   readonly imag_i: number;
   readonly imag_j: number;
@@ -118,6 +120,15 @@ export class Quaternion implements Arithmetic<Quaternion> {
 
   normalized() {
     return this.scale(1 / this.norm());
+  }
+
+  equal(rhs: Quaternion): boolean {
+    return (
+      this.real === rhs.real &&
+      this.imag_i === rhs.imag_i &&
+      this.imag_j === rhs.imag_j &&
+      this.imag_k === rhs.imag_k
+    );
   }
 
   toArray() {

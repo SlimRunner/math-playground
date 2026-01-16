@@ -26,7 +26,11 @@ export interface Congruent<T> {
   mod(rhs: T): T;
 }
 
-export interface Comparable<T> {
+export interface Equatable<T> {
+  equal(rhs: T): boolean;
+}
+
+export interface Comparable<T> extends Equatable<T> {
   compare(rhs: T): number;
 }
 

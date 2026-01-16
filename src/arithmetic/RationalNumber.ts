@@ -93,6 +93,12 @@ export class RationalNumber
     return new RationalNumber(this.numerator * factor, this.denominator);
   }
 
+  equal(rhs: RationalNumber): boolean {
+    return (
+      this.numerator === rhs.numerator && this.denominator === rhs.denominator
+    );
+  }
+
   compare(rhs: RationalNumber): number {
     return this.numerator / this.denominator - rhs.numerator / rhs.denominator;
   }

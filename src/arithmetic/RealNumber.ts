@@ -58,6 +58,10 @@ export class RealNumber
     return new RealNumber(residue + rhs.value);
   }
 
+  equal(rhs: RealNumber): boolean {
+    return this.value === rhs.value;
+  }
+
   compare(rhs: RealNumber): number {
     return this.value - rhs.value;
   }
