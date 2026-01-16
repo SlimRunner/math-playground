@@ -8,7 +8,7 @@ import { VectorError, MatrixError } from "../utilities/error";
 import { lcm_Q } from "../utilities/math";
 import { Quaternion } from "../linear-algebra/Quaternion";
 
-const ctab = (s:any) => {
+const ctab = (s: any) => {
   if (s instanceof Matrix || s instanceof Vector) {
     console.table(s.entries);
   } else if (s instanceof RationalNumber) {
@@ -19,9 +19,9 @@ const ctab = (s:any) => {
 };
 const clog = console.log;
 const plog = (...s: Array<any>) => {
-  if (s.length > 0 && s.every(e => e instanceof RationalNumber)) {
-    clog(...s.map(e => e.toString()));
+  if (s.length > 0 && s.every((e) => e instanceof RationalNumber)) {
+    clog(...s.map((e) => e.toString()));
   } else {
     clog(...s);
   }
-}
+};
