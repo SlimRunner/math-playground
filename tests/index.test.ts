@@ -1,6 +1,7 @@
 import { Matrix } from "../src/linear-algebra/Matrix";
 import { RationalNumber } from "../src/arithmetic/RationalNumber";
 import { RealNumber } from "../src/arithmetic/RealNumber";
+import { Quaternion } from "../src/linear-algebra/Quaternion";
 import { randomInt } from "crypto";
 
 describe("Matrix class", () => {
@@ -99,5 +100,64 @@ describe("RealNumber class", () => {
         expect(obj.value).toBe(answers.shift());
       }
     }
+  });
+});
+
+describe("Quaternion class", () => {
+  test("addition", () => {
+    type tuple4 = [number, number, number, number];
+    const cases: Array<[tuple4, tuple4]> = [
+      [
+        [1, 2, 3, 4],
+        [7, 6, 8, 9],
+      ],
+      [
+        [-1, 2, -3, 4],
+        [7, -6, 8, -9],
+      ],
+      [
+        [-123, 75, -12.32, Math.PI],
+        [-231.25, 12.5789, -321.123, Math.E],
+      ],
+    ];
+    cases.forEach(([a, b]) => {
+      const q1 = new Quaternion(...a);
+      const q2 = new Quaternion(...b);
+
+      const q3 = q1.add(q2);
+      const q4 = q2.add(q1);
+      const answer = a.map((n, i) => n + b[i]);
+
+      expect(q3.toArray().every((n, i) => n === answer[i]));
+      expect(q4.toArray().every((n, i) => n === answer[i]));
+    })
+  });
+  test("subtraction", () => {
+    type tuple4 = [number, number, number, number];
+    const cases: Array<[tuple4, tuple4]> = [
+      [
+        [1, 2, 3, 4],
+        [7, 6, 8, 9],
+      ],
+      [
+        [-1, 2, -3, 4],
+        [7, -6, 8, -9],
+      ],
+      [
+        [-123, 75, -12.32, Math.PI],
+        [-231.25, 12.5789, -321.123, Math.E],
+      ],
+    ];
+    cases.forEach(([a, b]) => {
+      const q1 = new Quaternion(...a);
+      const q2 = new Quaternion(...b);
+
+      const q3 = q1.subtract(q2);
+      const q4 = q2.subtract(q1);
+      const answer = a.map((n, i) => n - b[i]);
+
+      expect(q3.toArray().every((n, i) => n === answer[i]));
+      expect(q4.toArray().every((n, i) => n === answer[i]));
+    })
   });
 });
