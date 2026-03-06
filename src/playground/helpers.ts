@@ -48,7 +48,7 @@ export function* divSet(
   start: number,
   end: number,
   divisor: number,
-  offset: number = 0
+  offset: number = 0,
 ) {
   let s = Math.sign(end - start);
   if (start === end) {
@@ -72,4 +72,45 @@ export function* divSet(
     yield i;
     i += s * st;
   }
+}
+
+export function range(count: number): Generator<number, void, unknown>;
+export function range(
+  start: number,
+  end: number,
+): Generator<number, void, unknown>;
+export function range(
+  start: number,
+  end: number,
+  step: number,
+): Generator<number, void, unknown>;
+export function* range(
+  start: number,
+  end: number | null = null,
+  step: number = 1,
+): Generator<number, void, unknown> {
+  if (end == null) {
+    [start, end] = [0, start];
+  }
+  if ((end - start) * step < 0) {
+    return;
+  } else if (step >= 1) {
+    for (let i = start; i < end; i += step) {
+      yield i;
+    }
+  } else {
+    for (let i = start; i > end; i += step) {
+      yield i;
+    }
+  }
+}
+
+export function* enumerate<T>(
+  iter: Iterable<T>,
+): Generator<[number, T], void, unknown> {
+  let i = 0;
+  for (const item of iter) {
+    yield [i++, item];
+  }
+  return;
 }
