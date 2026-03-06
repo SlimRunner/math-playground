@@ -274,6 +274,24 @@ export class Matrix {
     return result;
   }
 
+  addRowPartial(rowTo: number, rowFrom: number, kFrom: number) {
+    const result = Matrix.copy(this);
+    if (kFrom === 0) return result;
+    for (let j = rowFrom; j < result.columns; ++j) {
+      result.entries[rowTo][j] = result.entries[rowTo][j] + kFrom * result.entries[rowFrom][j];
+    }
+    // result.erops.push({
+    //   info: {
+    //     type: RowOpType.AddRow,
+    //     row: rowTo,
+    //     addendRow: rowFrom,
+    //     scalar: kFrom
+    //   },
+    //   factor: 1
+    // });
+    return result;
+  }
+
   scaleRow(row: number, k: number) {
     const result = Matrix.copy(this);
     if (k === 1) return result;
