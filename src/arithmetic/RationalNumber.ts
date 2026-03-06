@@ -1,3 +1,11 @@
+import {
+  Arithmetic,
+  ArithmeticIdentities,
+  Comparable,
+  Congruent,
+} from "../interfaces";
+import { RealNumber } from "./RealNumber";
+
 function gcd(a: number, b: number) {
   a = Math.abs(a);
   b = Math.abs(b);
@@ -7,9 +15,14 @@ function gcd(a: number, b: number) {
   return a;
 }
 
-export class RationalNumber {
-  numerator: number;
-  denominator: number;
+export class RationalNumber
+  implements
+    Arithmetic<RationalNumber>,
+    Comparable<RationalNumber>,
+    Congruent<RationalNumber>
+{
+  readonly numerator: number;
+  readonly denominator: number;
 
   constructor(numerator: number, denominator: number) {
     if (!Number.isInteger(numerator) || !Number.isInteger(denominator)) {
@@ -24,32 +37,113 @@ export class RationalNumber {
 
   add(rhs: RationalNumber) {
     const commonDenom = gcd(this.denominator, rhs.denominator);
-    const leastMult = this.denominator * rhs.denominator / commonDenom;
-    const a = this.numerator * rhs.denominator / commonDenom;
-    const b = rhs.numerator * this.denominator / commonDenom;
+    const leastMult = (this.denominator * rhs.denominator) / commonDenom;
+    const a = (this.numerator * rhs.denominator) / commonDenom;
+    const b = (rhs.numerator * this.denominator) / commonDenom;
     return new RationalNumber(a + b, leastMult);
   }
 
   subtract(rhs: RationalNumber) {
     const commonDenom = gcd(this.denominator, rhs.denominator);
-    const leastMult = this.denominator * rhs.denominator / commonDenom;
-    const a = this.numerator * rhs.denominator / commonDenom;
-    const b = rhs.numerator * this.denominator / commonDenom;
+    const leastMult = (this.denominator * rhs.denominator) / commonDenom;
+    const a = (this.numerator * rhs.denominator) / commonDenom;
+    const b = (rhs.numerator * this.denominator) / commonDenom;
     return new RationalNumber(a - b, leastMult);
   }
 
   multiply(rhs: RationalNumber) {
-    return new RationalNumber(this.numerator * rhs.numerator, this.denominator * rhs.denominator);
+    return new RationalNumber(
+      this.numerator * rhs.numerator,
+      this.denominator * rhs.denominator
+    );
   }
 
   divide(rhs: RationalNumber) {
-    return new RationalNumber(this.numerator * rhs.denominator, this.denominator * rhs.numerator);
+    // you might want to compute the GDC before to prevent oveflow
+    return new RationalNumber(
+      this.numerator * rhs.denominator,
+      this.denominator * rhs.numerator
+    );
+  }
+
+  abs() {
+    return new RationalNumber(
+      Math.abs(this.numerator),
+      Math.abs(this.denominator)
+    );
+  }
+
+  mod(rhs: RationalNumber) {
+    // https://www.desmos.com/calculator/lcxu6dlrim
+    const num = this.numerator * rhs.denominator;
+    const denom = this.denominator * rhs.numerator;
+    const ratio = num / denom;
+    const factor = Math.abs(ratio);
+    if (ratio >= 0) {
+      return this.subtract(rhs.scale(Math.floor(factor)));
+    } else {
+      return this.add(rhs.scale(Math.ceil(factor)));
+    }
+  }
+
+  scale(factor: number) {
+    if (!Number.isInteger(factor)) {
+      throw TypeError("Rational number operands must be integral.");
+    }
+    return new RationalNumber(this.numerator * factor, this.denominator);
+  }
+
+  equal(rhs: RationalNumber): boolean {
+    return (
+      this.numerator === rhs.numerator && this.denominator === rhs.denominator
+    );
+  }
+
+  compare(rhs: RationalNumber): number {
+    return this.numerator / this.denominator - rhs.numerator / rhs.denominator;
+  }
+
+  isInteger() {
+    return Math.abs(this.denominator) == 1;
+  }
+
+  toInteger() {
+    if (!this.isInteger()) {
+      throw TypeError("Cannot be converted to integer.");
+    }
+    return new RealNumber(this.numerator * this.denominator);
+  }
+
+  toRealNumber() {
+    return new RealNumber(this.numerator / this.denominator);
   }
 
   fixSigns() {
     const negative = this.numerator < 0 !== this.denominator < 0;
-    const a = Math.abs(this.numerator) * (negative? -1: 1);
+    const a = Math.abs(this.numerator) * (negative ? -1 : 1);
     const b = Math.abs(this.denominator);
     return new RationalNumber(a, b);
   }
+
+  toString() {
+    if (this.numerator === 0) {
+      return this.numerator.toString();
+    }
+    if (this.denominator === 1) {
+      return this.numerator.toString();
+    }
+    return `${this.numerator.toString()} / ${this.denominator.toString()}`;
+  }
+
+  toLatex() {
+    if (this.denominator === 1) {
+      return this.numerator.toString();
+    }
+    return String.raw`\frac{${this.numerator.toString()}}{${this.denominator.toString()}}`;
+  }
+
+  static readonly ZERO = new RationalNumber(0, 1);
+  static readonly ONE = new RationalNumber(1, 1);
 }
+
+RationalNumber satisfies ArithmeticIdentities<RationalNumber>;
